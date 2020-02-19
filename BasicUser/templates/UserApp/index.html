@@ -1,0 +1,14 @@
+{% extends "UserApp/base.html" %}
+{% block body_block %}
+
+  <div class="jumbotron">
+    <p class="display-4"> Welcome to Django!!!</p>
+    {% if user.is_authenticated %}
+      <p class="h5 lead">Welcome {{ user.username }}</p>
+      <p class="lead">This is the home page of the website</p>
+    {% else %}
+      <p class="lead">This is the home page of the website</p>
+    {% endif %}
+  </div>
+
+{% endblock %}
