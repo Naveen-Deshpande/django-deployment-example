@@ -1,0 +1,15 @@
+{% extends "Blog/base.html" %}
+{% block content %}
+  <!-- loop through the posts to get the unpublished drafts -->
+  {% for post in posts %}
+    <div class="post">
+      <!-- display the created date of the post with date filter -->
+      <p class="lead date">created: {{post.created_date|date:'d-m-Y'}}</p>
+      <!-- create a link that takes to that draft post details -->
+      <p class="h3"><a href="{% url 'post_deatil' pk=post.pk %}">{{post.title}}</a></p>
+      <!-- display the actual post text. use the truncatechars filter to
+      format the text  -->
+      <p class="lead">{{post.text|truncatechars:200}}</p>
+    </div>
+  {% endfor %}
+{% endblock %}

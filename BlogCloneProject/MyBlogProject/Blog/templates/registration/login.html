@@ -1,0 +1,23 @@
+{% extends "Blog/base.html" %}
+{% block content %}
+
+  <div class="jumbotron">
+    <p class='display-4'>Please Login</p>
+    <p class="lead">(Must be a Superuser, plase contact the site admin to get access as a Superuser)</p>
+    {% if form.errors %}
+      <p class="h4">username or password didn't match, Please try again!</p>
+    {% endif %}
+
+    <form action="{% url 'login' %}" method="POST">
+      {% csrf_token %}
+      {{ form.as_p }}
+
+      <input type="submit" name="" class="btn btn-primary" value="Login">
+      <!-- hidden input the views.login from authorisation provides the value
+            for next varibale in the hidden input, which tells what happens
+              when the user is logged in-->
+      <input type="hidden" name="next" value="{{next}}">
+    </form>
+  </div>
+
+{% endblock %}

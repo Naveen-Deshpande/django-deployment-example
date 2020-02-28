@@ -1,0 +1,71 @@
+{% extends "Blog/base.html" %}
+{% block content %}
+
+  <!-- display the post title -->
+  <h2 class="h2 posttitle loader">{{post.title}}</h2>
+  <!-- check id the psot has publication date -->
+  {% if post.published_date %}
+    <!-- display the date -->
+    <div class="date postdate">
+      {{post.published_date}}
+    </div>
+  {% else %}
+    <!-- add a button to publish the post -->
+    <a class="btn btn-default" href="{% url 'post_publish' pk=post.pk %}">Publish</a>
+  {% endif %}
+
+  <!-- template filter safe is used to display the data as required without html tags
+  when using the medium editor, linebreaksbr is used to call the <br/> tags if there
+  is a line break -->
+  <p class="postcontent">{{post.text|safe|linebreaks}}</p>
+
+  <!-- check if the user is logged in to provide edit and remove post access -->
+  {% if user.is_authenticated %}
+  <!-- button to edit the post if user is logged in. glyphicon-pencil
+  gives the edit icon -->
+    <a class="btn btn-priamry" href="{% url 'post_edit' pk=post.pk %}">
+      <span class="fa fa-pencil"></span>
+    </a>
+    <!-- button to remove the posts with remove glyphicon -->
+    <a class="btn btn-priamry" href="{% url 'post_remove' pk=post.pk %}">
+      <span class="fa fa-remove"></span>
+    </a>
+  {% endif %}
+
+  <!-- add a horizontal rule -->
+  <hr>
+
+  <!-- add a button to add comments to the post  -->
+  <a class="btn btn-dark btn-comment" href="{% url 'add_comment_to_post' pk=post.pk %}">Add Comments</a>
+
+  <!-- list of the comments added to the post inside a container class -->
+  {% for comment in post.comments.all %}
+    <br>
+        <!-- only display the comments that are approved by the user -->
+        {% if user.is_authenticated or comment.approved_comment %}
+        <!-- display the comment created date  -->
+            {{comment.created_date}}
+            <!-- if it is not approved create 2 buttons to aprrove it or remove it -->
+                {% if not comment.approved_comment %}
+                      <a class="btn btn-dark" href="{% url 'comment_remove' pk=comment.pk %}">
+                        <span class="fa fa-remove"></span>
+                      </a>
+                      <a class="btn btn-dark" href="{% url 'comment_approve' pk=comment.pk %}">
+                        <span class="fa fa-check"></span>
+                      </a>
+                {% endif %}
+
+                <!-- display the actual commented text here
+                use the template filters safe and linebreaks -->
+                <p class="lead">{{comment.text|safe|linebreaks}}</p>
+
+                <!-- display the user name who has posted the comment  -->
+                <p class="h5">Posted by:<strong>{{comment.author}}</strong></p>
+
+        {% endif %}
+    <!-- empty tag is simple tag that checks if the content is empty -->
+    {% empty %}
+      <p class="lead">No Comments posted!</p>
+  {% endfor %}
+
+{% endblock %}

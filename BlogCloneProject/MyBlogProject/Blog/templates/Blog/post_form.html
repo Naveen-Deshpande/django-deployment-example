@@ -1,0 +1,16 @@
+{% extends "Blog/base.html" %}
+{% block content %}
+
+  <p class="display-4">New Post</p>
+  <!-- create a form to create a ne post -->
+  <form class="post-form"  method="POST">
+    {% csrf_token %}
+    {{form.as_p}}
+
+    <input type="submit" class="save btn btn-dark" value="Save">
+  </form>
+
+  <!-- create a javascript variable to editor to use the medium editor
+  sytle in the form -->
+  <script>var editor = new MediumEditor('.editable');</script>
+{% endblock %}
